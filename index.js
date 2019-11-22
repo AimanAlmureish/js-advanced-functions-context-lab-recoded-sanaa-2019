@@ -10,7 +10,7 @@
  */
  
     function createEmployeeRecord(array) {
-            let object = {
+            let this = {
                 firstName: array[0],
                 familyName: array[1],
                 title: array[2],
@@ -19,7 +19,7 @@
                 timeOutEvents: [],
             }
 
-            return object
+            return this
 
         }
 
@@ -36,7 +36,7 @@
 
         }
         
-                function createTimeInEvent(object, timeIn) {
+                function createTimeInEvent(this, timeIn) {
             let splittedTime = timeIn.split(" ");
 
             let newEvent = {
@@ -46,12 +46,12 @@
 
             }
 
-            object.timeInEvents.push(newEvent)
-            return object
+            this.timeInEvents.push(newEvent)
+            return this
         }
         
         
-        function createTimeOutEvent(object, timeOut) {
+        function createTimeOutEvent(this, timeOut) {
             let splittedTime = timeOut.split(" ");
 
             let newEvent = {
@@ -61,25 +61,25 @@
 
             }
 
-            object.timeOutEvents.push(newEvent)
-            return object
+            this.timeOutEvents.push(newEvent)
+            return this
         }
 
 
 
 
 
-        function hoursWorkedOnDate(object, workHours) {
+        function hoursWorkedOnDate(this, workHours) {
 
             let In
             let Out
-            object.timeInEvents.forEach(item => {
+            this.timeInEvents.forEach(item => {
                 if (item.date === workHours) {
                     In = item
                     console.log(In)
                 }
             })
-            object.timeOutEvents.forEach(item => {
+            this.timeOutEvents.forEach(item => {
                 if (item.date === workHours) {
                     Out = item
                     console.log(In)
@@ -98,16 +98,9 @@
 
 
 
-        function wagesEarnedOnDate(object, workHours) {
+        function wagesEarnedOnDate(this, workHours) {
 
-            let In = object.timeInEvents.find(e => e.date == workHours);
-            let Out = object.timeOutEvents.find(e => e.date == workHours);
-
-            let hIn = parseInt(In.hour.toString(10).slice(0, -2))
-            let hOut = parseInt(Out.hour.toString(10).slice(0, -2))
-
-            let workingHours = hOut - hIn;
-            return workingHours * object.payPerHour
+            return hoursWorkedOnDate.call(this,workHours) * this.payPerHour
 
         }
 
@@ -115,11 +108,11 @@
 
 
 
-        function allWagesFor(object) {
+        function allWagesFor(this) {
 
             let arr = [];
-            for (const item in object.timeInEvents) {
-                let payments = wagesEarnedOnDate(object, object.timeInEvents[item].date)
+            for (const item in this.timeInEvents) {
+                let payments = wagesEarnedOnDate(this, this.timeInEvents[item].date)
                 arr.push(payments);
             }
 
@@ -146,10 +139,10 @@
 
 
 
-        function findEmployeebyFirstName(object, fn) {
+        function findEmployeebyFirstName(this, fn) {
             let name
 
-            object.forEach(item => {
+            this.forEach(item => {
                 if (item.firstName == fn) {
                     name = item
                     console.log(name)
